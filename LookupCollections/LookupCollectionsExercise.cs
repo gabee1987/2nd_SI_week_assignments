@@ -18,11 +18,18 @@ namespace LookupCollections
             listDictionary["Estados Unidos"] = "United States of America";
             listDictionary["Canadá"] = "Canada";
             listDictionary["España"] = "Spain";
+            listDictionary["Hungría"] = "Hungary";
+            listDictionary["Japón"] = "Japan";
+            listDictionary["Alemania"] = "Germany";
+            listDictionary["Sudáfrica"] = "South Africa";
+            listDictionary["Reino Unido"] = "United Kingdom";
+            listDictionary["Suiza"] = "Switzerland";
+            listDictionary["Rusia"] = "Russia";
 
             Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine("Exercise 2 (Queue)\n");
             Console.ResetColor();
-                Console.WriteLine("   English version                  Spain version \n");
+            Console.WriteLine("   English version                  Spain version \n");
             foreach (DictionaryEntry item in listDictionary)
             {
                 Console.WriteLine("   {0,-25}        {1}", item.Value, item.Key);
