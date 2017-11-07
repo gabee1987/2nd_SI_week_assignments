@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{92CF531D-8352-4536-98DD-5DDCA177F615}</ProjectGuid>
+    <ProjectGuid>{D0097245-3E91-4DC4-9CB6-16BCBC198DF5}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>SequentialCollections</RootNamespace>
-    <AssemblyName>SequentialCollections</AssemblyName>
+    <RootNamespace>LookupCollections</RootNamespace>
+    <AssemblyName>LookupCollections</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -42,7 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="SequentialCollectionsExercise.cs" />
+    <Compile Include="LookupCollectionsExercise.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DictionaryCollections
 {
-    class Program
+    class DictionaryCollectionsExercise
     {
         static void Main(string[] args)
         {

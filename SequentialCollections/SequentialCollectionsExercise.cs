@@ -7,7 +7,7 @@ using System.Collections;
 
 namespace SequentialCollections
 {
-    class Program
+    class SequentialCollectionsExercise
     {
         static void Main(string[] args)
         {
