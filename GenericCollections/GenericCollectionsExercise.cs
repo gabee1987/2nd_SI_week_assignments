@@ -12,8 +12,6 @@ namespace GenericCollections
     {
         static void Main(string[] args)
         {
-            //var countryCodes = new List<int>();
-            //var countries = new List<string>();
             var countryCodes = new List<int>();
             List<string> countryCodesStrings = File.ReadAllLines(@"I:\CodeCool\.NET\SI_assignments\2nd_SI_week\GenericCollections\codes.txt").ToList();
             List<string> countries = File.ReadAllLines(@"I:\CodeCool\.NET\SI_assignments\2nd_SI_week\GenericCollections\countries.txt").ToList();
@@ -28,6 +26,7 @@ namespace GenericCollections
             // create a dictionary using .Zip and .ToDictionary
             var countryLookup = countryCodes.Zip(countries, (k, v) => new { Key = k, Value = v }).ToDictionary(x => x.Key, x => x.Value);
 
+            // create a dictionary using for loop
             /*
             for (int dictKey = 0; dictKey < countryCodes.Count; dictKey++)
             {
