@@ -30,7 +30,6 @@ namespace GenericCollections
             /*
             for (int dictKey = 0; dictKey < countryCodes.Count; dictKey++)
             {
-                int TempDuplicate = countryCodes[dictKey];
                 countryLookup.Add(countryCodes[dictKey], countries[dictKey]);
             }
             */
@@ -48,10 +47,6 @@ namespace GenericCollections
                 //Console.WriteLine("Code {0,-25} =   {1}", code, country);
                 Console.WriteLine("   {0,-25}     {1}", item.Key, item.Value);
             }
-            
-            
-            var duplicates = countryCodes.GroupBy(a => a).SelectMany(ab => ab.Skip(1).Take(1)).ToList();
-            duplicates.ForEach(Console.WriteLine);
             Console.ReadLine();
         }
 
