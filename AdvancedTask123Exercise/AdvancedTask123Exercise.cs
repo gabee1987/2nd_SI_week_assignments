@@ -9,46 +9,52 @@ namespace AdvancedTask123
 {
     class AdvancedTask123Exercise
     {
+        static List<FileInfo> FoundFiles;
+        static List<FileSystemWatcher> watchers;
+
+
         static void Main(string[] args)
         {
-            //exampleExercise(args[0], args[1]);
-            searchForAFile();
-            
+            //ExampleExercise(args[0], args[1]);
+            SearchForAFileAndWatchChanges();
+            //FileWatcherExerciseVersion();
+            Console.ReadLine();
         }
 
-        static List<FileInfo> FoundFiles;
 
         static void RecursiveSearch(List<FileInfo> foundFiles, string fileName, DirectoryInfo currentDirectory)
         {
             try
             {
-                foreach (FileInfo file in currentDirectory.GetFiles())
+                if (currentDirectory.Exists)
                 {
-                    if (file.Name == fileName)
-                        foundFiles.Add(file);
-                }
-                foreach (DirectoryInfo dir in currentDirectory.GetDirectories())
-                {
-                    if (currentDirectory.Exists)
+                    foreach (FileInfo file in currentDirectory.GetFiles())
+                    {
+                        if (file.Name == fileName)
+                            foundFiles.Add(file);
+                    }
+                    foreach (DirectoryInfo dir in currentDirectory.GetDirectories())
                     {
                         RecursiveSearch(foundFiles, fileName, dir);
                     }
-                    else
-                    {
-                        Console.WriteLine("There is no directory named {0}", currentDirectory.FullName);
-                    }
+                }
+                else
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("\n There is no directory named {0}", currentDirectory.FullName);
+                    Console.ResetColor();
                 }
             } catch (DirectoryNotFoundException e)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("\nThe directory is not exists \n");
+                Console.WriteLine("\n The directory is not exists \n");
                 Console.ResetColor();
-                Console.WriteLine("\nDetails: \n");
+                Console.WriteLine("\n Details: \n");
                 Console.WriteLine(e.ToString());
             }
         }
 
-        static void searchForAFile()
+        static void SearchForAFileAndWatchChanges()
         {
             bool running = true;
             while (running)
@@ -90,7 +96,7 @@ namespace AdvancedTask123
                 Console.ResetColor();
                 foreach (FileInfo file in FoundFiles)
                 {
-                    Console.WriteLine("{0}", file.FullName);
+                    Console.WriteLine(" {0}", file.FullName);
                 }
                 Console.ForegroundColor = ConsoleColor.DarkCyan;
                 Console.WriteLine("-----------------------------------------------------------------------------------------------");
@@ -115,10 +121,16 @@ namespace AdvancedTask123
                 {
                     continue;
                 }
+
+                Console.ForegroundColor = ConsoleColor.DarkCyan;
+                Console.WriteLine("\n Now you can change the files to test the FileSystemWatcher.");
+                Console.ResetColor();
+                FileWatcher();
+                Console.ReadLine();
             }
         }
 
-        static void exampleExercise(string fileNameInfo, string directoryNameInfo)
+        static void ExampleExercise(string fileNameInfo, string directoryNameInfo)
         {
             string fileName = fileNameInfo;
             string directoryName = directoryNameInfo;
@@ -137,6 +149,57 @@ namespace AdvancedTask123
                 Console.WriteLine("{0}", file.FullName);
             }
             Console.ReadKey();
+        }
+
+        static void FileWatcher()
+        {
+            watchers = new List<FileSystemWatcher>();
+
+            foreach (FileInfo file in FoundFiles)
+            {
+                // Create a new FileSystemWatcher
+                FileSystemWatcher newWatcher = new FileSystemWatcher(file.DirectoryName, file.Name);
+
+                // Only watch text files.
+                //newWatcher.Filter = "*.txt";
+
+                // Add event handlers.
+                newWatcher.Changed += new FileSystemEventHandler(OnChanged);
+                newWatcher.Created += new FileSystemEventHandler(OnChanged);
+                newWatcher.Deleted += new FileSystemEventHandler(OnChanged);
+                newWatcher.Renamed += new RenamedEventHandler(OnRenamed);
+
+                // Begin watching.
+                newWatcher.EnableRaisingEvents = true;
+
+                //Add watcher to a list
+                watchers.Add(newWatcher);
+            }
+        }
+
+        // Define the event handlers.
+        private static void OnChanged(object source, FileSystemEventArgs e)
+        {
+            // Print out the details when a file is changed, created, or deleted.
+            Console.Write(" File: ");
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.Write(e.FullPath);
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
+            Console.Write(" " + e.ChangeType + "\n");
+            Console.ResetColor();
+        }
+
+        private static void OnRenamed(object source, RenamedEventArgs e)
+        {
+            // Print out the details when a file is renamed.
+            Console.Write(" File: ");
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.Write(e.OldFullPath);
+            Console.ResetColor();
+            Console.Write(" renamed to ");
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.Write(e.FullPath);
+            Console.ResetColor();
         }
     }
 }
