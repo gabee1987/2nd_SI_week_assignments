@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdvancedTask123", "Advanced
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IsolatedStorageDemo", "IsolatedStorageDemo\IsolatedStorageDemo.csproj", "{4E172A52-379C-4871-B22F-E92BED8A28ED}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SearchingForAfile", "SearchingForAfile\SearchingForAfile.csproj", "{A4989000-E924-4D2E-9A8A-7ECEC4CD1689}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{4E172A52-379C-4871-B22F-E92BED8A28ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4E172A52-379C-4871-B22F-E92BED8A28ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4E172A52-379C-4871-B22F-E92BED8A28ED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A4989000-E924-4D2E-9A8A-7ECEC4CD1689}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A4989000-E924-4D2E-9A8A-7ECEC4CD1689}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A4989000-E924-4D2E-9A8A-7ECEC4CD1689}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A4989000-E924-4D2E-9A8A-7ECEC4CD1689}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
