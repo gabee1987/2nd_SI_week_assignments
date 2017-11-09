@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.IO.Compression;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,6 +12,7 @@ namespace AdvancedTask123
     {
         static List<FileInfo> FoundFiles;
         static List<FileSystemWatcher> watchers;
+        static List<DirectoryInfo> archiveDirs;
 
 
         static void Main(string[] args)
@@ -111,7 +113,7 @@ namespace AdvancedTask123
                 Console.ForegroundColor = ConsoleColor.DarkRed;
                 Console.Write(" \"exit\" ");
                 Console.ResetColor();
-                Console.Write("if you want to quit from the application. \n");
+                Console.Write("if you want to continue to FileWatch test. \n");
                 exit = Console.ReadLine();
                 if (exit == "exit")
                 {
@@ -123,10 +125,14 @@ namespace AdvancedTask123
                 }
 
                 Console.ForegroundColor = ConsoleColor.DarkCyan;
-                Console.WriteLine("\n Now you can change the files to test the FileSystemWatcher.");
+                Console.WriteLine("\n Now you can change the files to test the FileSystemWatcher. You can exit at any time by enter 'q' \n");
                 Console.ResetColor();
-                FileWatcher();
-                Console.ReadLine();
+                do
+                {
+                    FileWatcher();
+                } while (Console.Read() != 'q');
+                    FileWatcher();
+                //Console.ReadLine();
             }
         }
 
@@ -160,20 +166,33 @@ namespace AdvancedTask123
                 // Create a new FileSystemWatcher
                 FileSystemWatcher newWatcher = new FileSystemWatcher(file.DirectoryName, file.Name);
 
+                // Watch for changes in LastAccess and LastWrite times, and the renaming of files or directories.
+                newWatcher.NotifyFilter = NotifyFilters.LastAccess | NotifyFilters.LastWrite
+           |    NotifyFilters.FileName | NotifyFilters.DirectoryName;
+
+
                 // Only watch text files.
                 //newWatcher.Filter = "*.txt";
 
                 // Add event handlers.
-                newWatcher.Changed += new FileSystemEventHandler(OnChanged);
-                newWatcher.Created += new FileSystemEventHandler(OnChanged);
-                newWatcher.Deleted += new FileSystemEventHandler(OnChanged);
-                newWatcher.Renamed += new RenamedEventHandler(OnRenamed);
+                //if (newWatcher.NotifyFilter == NotifyFilters.LastWrite)
+                //{
+                //    newWatcher.Changed += new FileSystemEventHandler(OnChangedAndArchive);
+                //} else
+                //{
+                    newWatcher.Changed += new FileSystemEventHandler(OnChangedAndArchive);
+                    //newWatcher.Changed += new FileSystemEventHandler(OnChanged);
+                    newWatcher.Created += new FileSystemEventHandler(OnChanged);
+                    newWatcher.Deleted += new FileSystemEventHandler(OnChanged);
+                    newWatcher.Renamed += new RenamedEventHandler(OnRenamed);
+                //}
 
                 // Begin watching.
                 newWatcher.EnableRaisingEvents = true;
 
                 //Add watcher to a list
                 watchers.Add(newWatcher);
+
             }
         }
 
@@ -189,6 +208,29 @@ namespace AdvancedTask123
             Console.ResetColor();
         }
 
+        private static void OnChangedAndArchive(object source, FileSystemEventArgs e)
+        {
+            // Print out the details when a file is changed, created, or deleted.
+            Console.Write(" File: ");
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.Write(e.FullPath);
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
+            Console.Write(" " + e.ChangeType);
+            Console.ResetColor();
+            Console.Write(" and archived ");
+
+            CreateArchiveDirectories();
+            //find the the index of the changed file 
+            FileSystemWatcher sourceWatcher = (FileSystemWatcher)source;
+            int index = watchers.IndexOf(sourceWatcher, 0);
+            //now that we have the index, we can archive the file 
+            ArchiveFile(archiveDirs[index], FoundFiles[index]);
+            Console.Write("to ");
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.Write(archiveDirs[index].FullName + "\n");
+            Console.ResetColor();
+        }
+
         private static void OnRenamed(object source, RenamedEventArgs e)
         {
             // Print out the details when a file is renamed.
@@ -196,10 +238,52 @@ namespace AdvancedTask123
             Console.ForegroundColor = ConsoleColor.Green;
             Console.Write(e.OldFullPath);
             Console.ResetColor();
-            Console.Write(" renamed to ");
+            Console.Write(" renamed to \n");
             Console.ForegroundColor = ConsoleColor.Green;
-            Console.Write(e.FullPath);
+            Console.Write(e.FullPath + "\n");
             Console.ResetColor();
+
+            // Add renamed file to foundFiles list and refresh FileWatcher
+            FileInfo renamedFile = new FileInfo(e.FullPath);
+            FoundFiles.Add(renamedFile);
+            FileWatcher();
+        }
+
+
+
+        static void CreateArchiveDirectories()
+        {
+            archiveDirs = new List<DirectoryInfo>();
+            //create archive directories
+            for (int file = 0; file < FoundFiles.Count; file++)
+            {
+                //string dirInfo = FoundFiles[file].DirectoryName;
+                archiveDirs.Add(Directory.CreateDirectory(FoundFiles[file].DirectoryName + "\\Archive_" + file.ToString()));
+            }
+        }
+
+        static void ArchiveFile(DirectoryInfo archiveDir, FileInfo fileToArchive)
+        {
+            FileStream input = fileToArchive.OpenRead();
+            FileStream output = File.Create(
+                                            archiveDir.FullName +
+                                            @"\" +
+                                            Path.GetFileNameWithoutExtension(fileToArchive.ToString()) +
+                                            DateTime.Now.ToString("_yyyy-MM-dd-hh-mm-ss") +
+                                            fileToArchive.Extension +
+                                            ".gz"
+                                            );
+            GZipStream Compressor = new GZipStream(output, CompressionMode.Compress);
+            int b = input.ReadByte();
+            while (b != -1)
+            {
+                Compressor.WriteByte((byte)b);
+
+                b = input.ReadByte();
+            }
+            Compressor.Close();
+            input.Close();
+            output.Close();
         }
     }
 }
