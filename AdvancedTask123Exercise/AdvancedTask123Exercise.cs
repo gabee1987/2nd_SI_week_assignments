@@ -132,7 +132,6 @@ namespace AdvancedTask123
                     FileWatcher();
                 } while (Console.Read() != 'q');
                     FileWatcher();
-                //Console.ReadLine();
             }
         }
 
