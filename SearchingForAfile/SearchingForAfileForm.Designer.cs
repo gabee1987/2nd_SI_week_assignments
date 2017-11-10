@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SearchingForAfileForm));
             this.SelectModeGroupBox = new System.Windows.Forms.GroupBox();
             this.SubFoldersCheckBox = new System.Windows.Forms.CheckBox();
             this.WatchDirectoryRadioButton = new System.Windows.Forms.RadioButton();
@@ -45,7 +46,9 @@
             this.SaveFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.WatcherRefresh = new System.Windows.Forms.Timer(this.components);
             this.ArchiveCheckBox = new System.Windows.Forms.CheckBox();
+            this.LoadingPictureBox = new System.Windows.Forms.PictureBox();
             this.SelectModeGroupBox.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.LoadingPictureBox)).BeginInit();
             this.SuspendLayout();
             // 
             // SelectModeGroupBox
@@ -126,7 +129,7 @@
             // 
             // StartWatchButton
             // 
-            this.StartWatchButton.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
+            this.StartWatchButton.BackColor = System.Drawing.SystemColors.ControlLight;
             this.StartWatchButton.FlatAppearance.MouseDownBackColor = System.Drawing.SystemColors.GradientActiveCaption;
             this.StartWatchButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.StartWatchButton.ForeColor = System.Drawing.SystemColors.ControlText;
@@ -152,9 +155,9 @@
             // 
             this.ListNotification.FormattingEnabled = true;
             this.ListNotification.HorizontalScrollbar = true;
-            this.ListNotification.Location = new System.Drawing.Point(18, 161);
+            this.ListNotification.Location = new System.Drawing.Point(12, 161);
             this.ListNotification.Name = "ListNotification";
-            this.ListNotification.Size = new System.Drawing.Size(817, 251);
+            this.ListNotification.Size = new System.Drawing.Size(823, 251);
             this.ListNotification.TabIndex = 6;
             // 
             // SaveToLogButton
@@ -189,16 +192,27 @@
             this.ArchiveCheckBox.AutoSize = true;
             this.ArchiveCheckBox.Location = new System.Drawing.Point(148, 99);
             this.ArchiveCheckBox.Name = "ArchiveCheckBox";
-            this.ArchiveCheckBox.Size = new System.Drawing.Size(159, 17);
+            this.ArchiveCheckBox.Size = new System.Drawing.Size(136, 17);
             this.ArchiveCheckBox.TabIndex = 8;
-            this.ArchiveCheckBox.Text = "Archive the Files on Change";
+            this.ArchiveCheckBox.Text = "Archive File on Change";
             this.ArchiveCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // LoadingPictureBox
+            // 
+            this.LoadingPictureBox.Image = ((System.Drawing.Image)(resources.GetObject("LoadingPictureBox.Image")));
+            this.LoadingPictureBox.Location = new System.Drawing.Point(12, 149);
+            this.LoadingPictureBox.Name = "LoadingPictureBox";
+            this.LoadingPictureBox.Size = new System.Drawing.Size(823, 12);
+            this.LoadingPictureBox.TabIndex = 9;
+            this.LoadingPictureBox.TabStop = false;
+            this.LoadingPictureBox.Visible = false;
             // 
             // SearchingForAfileForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(847, 461);
+            this.ClientSize = new System.Drawing.Size(847, 465);
+            this.Controls.Add(this.LoadingPictureBox);
             this.Controls.Add(this.ArchiveCheckBox);
             this.Controls.Add(this.SaveToLogButton);
             this.Controls.Add(this.ListNotification);
@@ -212,6 +226,7 @@
             this.Text = "SearchingForAfile";
             this.SelectModeGroupBox.ResumeLayout(false);
             this.SelectModeGroupBox.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.LoadingPictureBox)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -236,6 +251,7 @@
         private System.Windows.Forms.Timer EditNotify;
         private System.Windows.Forms.Timer WatcherRefresh;
         private System.Windows.Forms.CheckBox ArchiveCheckBox;
+        private System.Windows.Forms.PictureBox LoadingPictureBox;
     }
 }
 

@@ -21,6 +21,7 @@ namespace SearchingForAfile
         private bool IsWatching;
         private FileInfo selectedFileInfo;
         private DirectoryInfo selectedDirectoryInfo;
+        private DirectoryInfo archiveDirectoryInfo;
 
 
         public SearchingForAfileForm()
@@ -39,8 +40,9 @@ namespace SearchingForAfile
                 IsWatching = false;
                 watcher.EnableRaisingEvents = false;
                 watcher.Dispose();
-                StartWatchButton.BackColor = Color.Aquamarine;
+                StartWatchButton.ForeColor = Color.DarkGreen;
                 StartWatchButton.Text = "Start Watching";
+                LoadingPictureBox.Visible = false;
             }
             // Create FileSystemWatcher for selected file or directory
             else
@@ -53,7 +55,7 @@ namespace SearchingForAfile
                 else
                 {
                     IsWatching = true;
-                    StartWatchButton.BackColor = Color.LightSalmon;
+                    StartWatchButton.ForeColor = Color.Crimson;
                     StartWatchButton.Text = "Stop Watching";
 
                     watcher = new FileSystemWatcher();
@@ -95,6 +97,7 @@ namespace SearchingForAfile
                     watcher.Renamed += new RenamedEventHandler(OnRenamed);
                     watcher.EnableRaisingEvents = true;
                     }
+                    LoadingPictureBox.Visible = true;
                 }
             }
         }
@@ -119,7 +122,7 @@ namespace SearchingForAfile
                 stringBuilder.Remove(0, stringBuilder.Length);
                 stringBuilder.Append(e.OldFullPath);
                 stringBuilder.Append(" ");
-                stringBuilder.Append(e.ChangeType.ToString());
+                stringBuilder.Append(" < " + e.ChangeType.ToString() + " > ");
                 stringBuilder.Append(" ");
                 stringBuilder.Append("to ");
                 stringBuilder.Append(e.Name);
@@ -141,6 +144,7 @@ namespace SearchingForAfile
                 stringBuilder.Append(e.FullPath);
                 stringBuilder.Append(" ");
                 stringBuilder.Append(" < " + e.ChangeType.ToString() + " > ");
+                stringBuilder.Append(" and < Archived > ");
                 stringBuilder.Append("  at " + DateTime.Now.ToString());
                 ArchiveFile(selectedDirectoryInfo, selectedFileInfo);
                 change = true;
@@ -149,24 +153,27 @@ namespace SearchingForAfile
 
         private void ArchiveFile(DirectoryInfo dirToArchive, FileInfo fileToArchive)
         {
+            archiveDirectoryInfo = new DirectoryInfo(dirToArchive + "\\Archives");
+            Directory.CreateDirectory(archiveDirectoryInfo.ToString());
             string fullPath = dirToArchive.ToString() + fileToArchive.ToString();
             FileInfo fullpathInfo = new FileInfo(fullPath);
             FileStream input = fullpathInfo.OpenRead();
             FileStream output = File.Create(
-                                            dirToArchive.FullName +
+                                            archiveDirectoryInfo.FullName +
                                             @"\" +
                                             Path.GetFileNameWithoutExtension(fileToArchive.ToString()) +
+                                            "_archive" +
                                             DateTime.Now.ToString("_yyyy-MM-dd-hh-mm-ss") +
                                             fileToArchive.Extension +
                                             ".gz"
                                             );
             GZipStream Compressor = new GZipStream(output, CompressionMode.Compress);
-            int b = input.ReadByte();
-            while (b != -1)
+            int byteInfo = input.ReadByte();
+            while (byteInfo != -1)
             {
-                Compressor.WriteByte((byte)b);
+                Compressor.WriteByte((byte)byteInfo);
 
-                b = input.ReadByte();
+                byteInfo = input.ReadByte();
             }
             Compressor.Close();
             input.Close();
@@ -214,6 +221,7 @@ namespace SearchingForAfile
             {
                 SubFoldersCheckBox.Enabled = false;
                 SubFoldersCheckBox.Checked = false;
+                ArchiveCheckBox.Enabled = true;
             }
         }
 
@@ -222,6 +230,7 @@ namespace SearchingForAfile
             if (WatchDirectoryRadioButton.Checked == true)
             {
                 SubFoldersCheckBox.Enabled = true;
+                ArchiveCheckBox.Enabled = false;
             }
         }
 
