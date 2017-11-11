@@ -27,6 +27,7 @@ namespace SearchingForAfile
         public SearchingForAfileForm()
         {
             InitializeComponent();
+            PopulateSelectFileTypeComboBox();
             stringBuilder = new StringBuilder();
             change = false;
             IsWatching = false;
@@ -61,9 +62,19 @@ namespace SearchingForAfile
                     watcher = new FileSystemWatcher();
                     if (WatchDirectoryRadioButton.Checked)
                     {
-                        watcher.Filter = "*.*";
-                        watcher.Path = FileToWatchTextBox.Text + "\\";
-                        selectedDirectoryInfo = new DirectoryInfo(FileToWatchTextBox.Text + "\\");
+                        if(SelectFileTypeComboBox.SelectedIndex > -1)
+                        {
+                            string selectedFileType = SelectFileTypeComboBox.SelectedItem.ToString();
+                            watcher.Filter = selectedFileType;
+                            watcher.Path = FileToWatchTextBox.Text + "\\";
+                            selectedDirectoryInfo = new DirectoryInfo(FileToWatchTextBox.Text + "\\");
+                        }
+                        else
+                        {
+                            watcher.Filter = "*.*";
+                            watcher.Path = FileToWatchTextBox.Text + "\\";
+                            selectedDirectoryInfo = new DirectoryInfo(FileToWatchTextBox.Text + "\\");
+                        }
                     }
                     else
                     {
@@ -222,6 +233,7 @@ namespace SearchingForAfile
                 SubFoldersCheckBox.Enabled = false;
                 SubFoldersCheckBox.Checked = false;
                 ArchiveCheckBox.Enabled = true;
+                SelectFileTypeComboBox.Enabled = false;
             }
         }
 
@@ -231,6 +243,7 @@ namespace SearchingForAfile
             {
                 SubFoldersCheckBox.Enabled = true;
                 ArchiveCheckBox.Enabled = false;
+                SelectFileTypeComboBox.Enabled = true;
             }
         }
 
@@ -243,6 +256,62 @@ namespace SearchingForAfile
                 ListNotification.EndUpdate();
                 change = false;
             }
+        }
+
+        private void SelectFileTypeComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (IsWatching)
+            {
+                //IsWatching = false;
+                watcher.EnableRaisingEvents = false;
+                watcher.Dispose();
+                //IsWatching = true;
+                watcher = new FileSystemWatcher();
+                watcher.NotifyFilter = NotifyFilters.LastAccess | NotifyFilters.LastWrite
+                                    | NotifyFilters.FileName | NotifyFilters.DirectoryName;
+                string selectedFileType = SelectFileTypeComboBox.SelectedItem.ToString();
+                watcher.Filter = selectedFileType;
+                watcher.Path = FileToWatchTextBox.Text + "\\";
+                selectedDirectoryInfo = new DirectoryInfo(FileToWatchTextBox.Text + "\\");
+
+                if (ArchiveCheckBox.Checked)
+                {
+                    watcher.Changed += new FileSystemEventHandler(OnChangedAndArchive);
+                    watcher.Created += new FileSystemEventHandler(OnChangedAndArchive);
+                    watcher.Deleted += new FileSystemEventHandler(OnChangedAndArchive);
+                    watcher.Renamed += new RenamedEventHandler(OnRenamed);
+                    watcher.EnableRaisingEvents = true;
+                }
+                else
+                {
+                    watcher.Changed += new FileSystemEventHandler(OnChanged);
+                    watcher.Created += new FileSystemEventHandler(OnChanged);
+                    watcher.Deleted += new FileSystemEventHandler(OnChanged);
+                    watcher.Renamed += new RenamedEventHandler(OnRenamed);
+                    watcher.EnableRaisingEvents = true;
+                }
+            }
+        }
+
+        private void PopulateSelectFileTypeComboBox()
+        {
+            SelectFileTypeComboBox.Items.Add("*.*");
+            SelectFileTypeComboBox.Items.Add("*.txt");
+            SelectFileTypeComboBox.Items.Add("*.log");
+            SelectFileTypeComboBox.Items.Add("*.rtf");
+            SelectFileTypeComboBox.Items.Add("*.doc");
+            SelectFileTypeComboBox.Items.Add("*.zip");
+            SelectFileTypeComboBox.Items.Add("*.rar");
+            SelectFileTypeComboBox.Items.Add("*.gz");
+            SelectFileTypeComboBox.Items.Add("*.exe");
+            SelectFileTypeComboBox.Items.Add("*.jpg");
+            SelectFileTypeComboBox.Items.Add("*.bmp");
+            SelectFileTypeComboBox.Items.Add("*.png");
+            SelectFileTypeComboBox.Items.Add("*.mp3");
+            SelectFileTypeComboBox.Items.Add("*.mp4");
+            SelectFileTypeComboBox.Items.Add("*.mkv");
+            SelectFileTypeComboBox.Items.Add("*.avi");
+            SelectFileTypeComboBox.Items.Add("*.mpeg");
         }
     }
 }

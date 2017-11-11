@@ -47,6 +47,8 @@
             this.WatcherRefresh = new System.Windows.Forms.Timer(this.components);
             this.ArchiveCheckBox = new System.Windows.Forms.CheckBox();
             this.LoadingPictureBox = new System.Windows.Forms.PictureBox();
+            this.SelectFileTypeComboBox = new System.Windows.Forms.ComboBox();
+            this.SelectFileTypeLabel = new System.Windows.Forms.Label();
             this.SelectModeGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.LoadingPictureBox)).BeginInit();
             this.SuspendLayout();
@@ -207,11 +209,32 @@
             this.LoadingPictureBox.TabStop = false;
             this.LoadingPictureBox.Visible = false;
             // 
+            // SelectFileTypeComboBox
+            // 
+            this.SelectFileTypeComboBox.FormattingEnabled = true;
+            this.SelectFileTypeComboBox.Location = new System.Drawing.Point(395, 78);
+            this.SelectFileTypeComboBox.Name = "SelectFileTypeComboBox";
+            this.SelectFileTypeComboBox.Size = new System.Drawing.Size(121, 21);
+            this.SelectFileTypeComboBox.TabIndex = 10;
+            this.SelectFileTypeComboBox.SelectedIndexChanged += new System.EventHandler(this.SelectFileTypeComboBox_SelectedIndexChanged);
+            // 
+            // SelectFileTypeLabel
+            // 
+            this.SelectFileTypeLabel.AutoSize = true;
+            this.SelectFileTypeLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.SelectFileTypeLabel.Location = new System.Drawing.Point(395, 62);
+            this.SelectFileTypeLabel.Name = "SelectFileTypeLabel";
+            this.SelectFileTypeLabel.Size = new System.Drawing.Size(59, 13);
+            this.SelectFileTypeLabel.TabIndex = 11;
+            this.SelectFileTypeLabel.Text = "File Type";
+            // 
             // SearchingForAfileForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(847, 465);
+            this.Controls.Add(this.SelectFileTypeLabel);
+            this.Controls.Add(this.SelectFileTypeComboBox);
             this.Controls.Add(this.LoadingPictureBox);
             this.Controls.Add(this.ArchiveCheckBox);
             this.Controls.Add(this.SaveToLogButton);
@@ -252,6 +275,8 @@
         private System.Windows.Forms.Timer WatcherRefresh;
         private System.Windows.Forms.CheckBox ArchiveCheckBox;
         private System.Windows.Forms.PictureBox LoadingPictureBox;
+        private System.Windows.Forms.ComboBox SelectFileTypeComboBox;
+        private System.Windows.Forms.Label SelectFileTypeLabel;
     }
 }
 
